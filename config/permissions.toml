@@ -1,0 +1,4 @@
+# Security Gate permissions — Sprint 1: allow all.
+
+[default]
+mode = "allow_all"

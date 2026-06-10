@@ -1,0 +1,35 @@
+# Static AI resource definitions for Sprint 1.
+# ARIS stub loads these on startup.
+
+[defaults]
+embedding_model = "nomic-embed-text"
+
+[[resources]]
+name = "ollama/llama3.1:8b"
+provider = "ollama"
+resource_type = "local_model"
+endpoint = "http://localhost:11434"
+auth_method = "none"
+context_window = 8192
+requires_network = false
+privacy_level = "local"
+
+[resources.capabilities]
+text_generation = 0.7
+summarization = 0.6
+code_generation = 0.5
+conversation = 0.75
+reasoning = 0.5
+instruction_following = 0.7
+
+[[resources]]
+name = "ollama/nomic-embed-text"
+provider = "ollama"
+resource_type = "local_model"
+endpoint = "http://localhost:11434"
+auth_method = "none"
+requires_network = false
+privacy_level = "local"
+
+[resources.capabilities]
+embedding = 1.0

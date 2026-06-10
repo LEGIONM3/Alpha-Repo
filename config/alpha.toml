@@ -1,0 +1,14 @@
+[alpha]
+data_dir = "data"
+
+[alpha.logging]
+level = "info"
+format = "pretty"
+
+[alpha.event_bus]
+purge_after_days = 30
+
+[alpha.identity]
+name = "Alpha"
+tone = "friendly_professional"
+verbosity = 0.7

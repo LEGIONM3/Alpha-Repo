@@ -1,0 +1,26 @@
+[package]
+name = "alpha-core"
+version.workspace = true
+edition.workspace = true
+
+[[bin]]
+name = "alpha"
+path = "src/main.rs"
+
+[dependencies]
+alpha-common = { path = "../alpha-common" }
+alpha-event-bus = { path = "../alpha-event-bus" }
+alpha-state = { path = "../alpha-state" }
+alpha-security = { path = "../alpha-security" }
+alpha-aris = { path = "../alpha-aris" }
+rusqlite = { workspace = true }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }

@@ -1,0 +1,47 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/alpha-aris",
+    "crates/alpha-common",
+    "crates/alpha-core",
+    "crates/alpha-event-bus",
+    "crates/alpha-security",
+    "crates/alpha-state",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+
+[workspace.dependencies]
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "0.8"
+
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+
+# Database
+rusqlite = { version = "0.32", features = ["bundled", "serde_json"] }
+
+# Identifiers
+uuid = { version = "1", features = ["v4", "serde"] }
+
+# Time
+chrono = { version = "0.4", features = ["serde"] }
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+
+# Hashing (for constitution integrity)
+sha2 = "0.10"
+
+# Error handling
+thiserror = "2"
+anyhow = "1"
+
+# Testing
+tempfile = "3"
