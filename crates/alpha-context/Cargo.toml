@@ -1,0 +1,15 @@
+[package]
+name = "alpha-context"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+alpha-common = { path = "../alpha-common" }
+alpha-memory = { path = "../alpha-memory" }
+alpha-relationship = { path = "../alpha-relationship" }
+alpha-knowledge = { path = "../alpha-knowledge" }
+chrono = { workspace = true }
+tracing = { workspace = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }

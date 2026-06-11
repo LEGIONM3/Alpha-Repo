@@ -3,8 +3,18 @@ resolver = "2"
 members = [
     "crates/alpha-aris",
     "crates/alpha-common",
+    "crates/alpha-context",
+    "crates/alpha-conversation",
     "crates/alpha-core",
+    "crates/alpha-dialog",
     "crates/alpha-event-bus",
+    "crates/alpha-explainability",
+    "crates/alpha-knowledge",
+    "crates/alpha-memory",
+    "crates/alpha-model-router",
+    "crates/alpha-orb-ui",
+    "crates/alpha-relationship",
+    "crates/alpha-resource",
     "crates/alpha-security",
     "crates/alpha-state",
 ]
@@ -22,6 +32,12 @@ toml = "0.8"
 
 # Async runtime
 tokio = { version = "1", features = ["full"] }
+
+# HTTP client
+reqwest = { version = "0.12", features = ["json", "stream"] }
+tokio-stream = "0.1"
+futures = "0.3"
+bytes = "1"
 
 # Database
 rusqlite = { version = "0.32", features = ["bundled", "serde_json"] }
@@ -43,5 +59,12 @@ sha2 = "0.10"
 thiserror = "2"
 anyhow = "1"
 
+# Hardware detection
+sysinfo = "0.33"
+
 # Testing
 tempfile = "3"
+
+# Desktop UI
+tao = "0.35"
+wry = "0.55"

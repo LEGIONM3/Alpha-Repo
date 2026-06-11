@@ -25,7 +25,7 @@ pub mod types;
 mod tests;
 
 use std::path::Path;
-use std::sync::Arc;
+use std::sync::{Arc, Mutex};
 
 use rusqlite::Connection;
 use tracing::{debug, info};
@@ -44,7 +44,7 @@ pub use types::{ResourceConstraints, ScoredResource, TaskResult};
 ///
 /// Sprint 1: static registry backed by SQLite. No learning engine.
 pub struct Aris {
-    conn: Connection,
+    conn: Mutex<Connection>,
     event_bus: Arc<EventBus>,
 }
 
@@ -89,7 +89,7 @@ impl Aris {
 
         info!(path = %db_path.display(), "ARIS opened");
 
-        Ok(Self { conn, event_bus })
+        Ok(Self { conn: Mutex::new(conn), event_bus })
     }
 
     /// Load initial resources from a models.toml config.
@@ -122,7 +122,10 @@ impl Aris {
         let id = resource.id;
 
         // Persist to database.
-        registry::insert_resource(&self.conn, &resource)?;
+        {
+            let conn = self.lock()?;
+            registry::insert_resource(&conn, &resource)?;
+        }
 
         debug!(name = %resource.name, id = %id, "Resource registered");
 
@@ -154,7 +157,8 @@ impl Aris {
         domain: &str,
         constraints: &ResourceConstraints,
     ) -> Result<Vec<ScoredResource>, AlphaError> {
-        let all_resources = registry::get_all_resources(&self.conn)?;
+        let conn = self.lock()?;
+        let all_resources = registry::get_all_resources(&conn)?;
 
         let mut scored: Vec<ScoredResource> = all_resources
             .into_iter()
@@ -214,7 +218,8 @@ impl Aris {
         &self,
         result: &TaskResult,
     ) -> Result<(), AlphaError> {
-        registry::insert_result(&self.conn, result)?;
+        let conn = self.lock()?;
+        registry::insert_result(&conn, result)?;
 
         debug!(
             resource_id = %result.resource_id,
@@ -232,7 +237,8 @@ impl Aris {
     /// **Sprint 1 stub**: returns last known status from the database.
     /// Does NOT perform an actual health check probe.
     pub fn health_check(&self, resource_id: AlphaId) -> Result<ResourceStatus, AlphaError> {
-        let resource = registry::get_resource(&self.conn, &resource_id)?
+        let conn = self.lock()?;
+        let resource = registry::get_resource(&conn, &resource_id)?
             .ok_or_else(|| AlphaError::NotFound {
                 entity: "AIResource".to_string(),
                 id: resource_id.to_string(),
@@ -249,12 +255,23 @@ impl Aris {
 
     /// Get all registered resources.
     pub fn get_all(&self) -> Result<Vec<AIResource>, AlphaError> {
-        registry::get_all_resources(&self.conn)
+        let conn = self.lock()?;
+        registry::get_all_resources(&conn)
     }
 
     /// Get the count of result log entries for a specific resource.
     pub fn result_count(&self, resource_id: &AlphaId) -> Result<u64, AlphaError> {
-        registry::result_count(&self.conn, resource_id)
+        let conn = self.lock()?;
+        registry::result_count(&conn, resource_id)
+    }
+}
+
+impl Aris {
+    /// Acquire the connection lock.
+    fn lock(&self) -> Result<std::sync::MutexGuard<'_, Connection>, AlphaError> {
+        self.conn.lock().map_err(|e| {
+            AlphaError::Database(format!("Failed to acquire ARIS lock: {e}"))
+        })
     }
 }
 
@@ -268,8 +285,10 @@ impl alpha_common::traits::Service for Aris {
     }
 
     fn shutdown(&mut self) -> Result<(), AlphaError> {
-        self.conn
-            .execute_batch("PRAGMA wal_checkpoint(TRUNCATE);")
+        let conn = self.conn.lock().map_err(|e| {
+            AlphaError::Database(format!("Failed to acquire ARIS lock for shutdown: {e}"))
+        })?;
+        conn.execute_batch("PRAGMA wal_checkpoint(TRUNCATE);")
             .map_err(|e| {
                 AlphaError::Database(format!(
                     "Failed to checkpoint ARIS WAL on shutdown: {}",

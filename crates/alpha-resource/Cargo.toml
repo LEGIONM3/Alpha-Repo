@@ -1,0 +1,11 @@
+[package]
+name = "alpha-resource"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+alpha-common = { path = "../alpha-common" }
+sysinfo = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }

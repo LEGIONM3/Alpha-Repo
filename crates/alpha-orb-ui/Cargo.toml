@@ -1,0 +1,18 @@
+[package]
+name = "alpha-orb-ui"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Desktop UI for Project Alpha — WebView2-based chat window"
+
+[dependencies]
+tao = { workspace = true }
+wry = { workspace = true }
+tracing = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true }
+alpha-conversation = { path = "../alpha-conversation" }
+
+[dev-dependencies]
+alpha-common = { path = "../alpha-common" }

@@ -12,6 +12,7 @@
 pub mod app;
 pub mod identity;
 pub mod init;
+pub mod provider;
 pub mod shutdown;
 
 #[cfg(test)]

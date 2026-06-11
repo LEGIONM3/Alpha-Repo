@@ -1,0 +1,23 @@
+[package]
+name = "alpha-conversation"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+alpha-common = { path = "../alpha-common" }
+alpha-context = { path = "../alpha-context" }
+alpha-dialog = { path = "../alpha-dialog" }
+alpha-event-bus = { path = "../alpha-event-bus" }
+alpha-knowledge = { path = "../alpha-knowledge" }
+alpha-memory = { path = "../alpha-memory" }
+alpha-model-router = { path = "../alpha-model-router" }
+alpha-relationship = { path = "../alpha-relationship" }
+chrono = { workspace = true }
+futures = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }

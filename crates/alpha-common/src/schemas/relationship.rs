@@ -128,7 +128,7 @@ impl RelationshipCoreRecord {
                 "RelationshipCoreRecord.protected must always be true".to_string(),
             ));
         }
-        if self.decay_rate != 0.0 {
+        if self.decay_rate.abs() >= 0.000001 {
             return Err(crate::error::AlphaError::Invariant(
                 "RelationshipCoreRecord.decay_rate must always be 0.0".to_string(),
             ));

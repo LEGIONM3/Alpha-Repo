@@ -9,10 +9,19 @@ path = "src/main.rs"
 
 [dependencies]
 alpha-common = { path = "../alpha-common" }
+alpha-context = { path = "../alpha-context" }
+alpha-conversation = { path = "../alpha-conversation" }
+alpha-dialog = { path = "../alpha-dialog" }
 alpha-event-bus = { path = "../alpha-event-bus" }
 alpha-state = { path = "../alpha-state" }
 alpha-security = { path = "../alpha-security" }
 alpha-aris = { path = "../alpha-aris" }
+alpha-resource = { path = "../alpha-resource" }
+alpha-model-router = { path = "../alpha-model-router" }
+alpha-memory = { path = "../alpha-memory" }
+alpha-relationship = { path = "../alpha-relationship" }
+alpha-knowledge = { path = "../alpha-knowledge" }
+alpha-explainability = { path = "../alpha-explainability" }
 rusqlite = { workspace = true }
 tokio = { workspace = true }
 serde = { workspace = true }
